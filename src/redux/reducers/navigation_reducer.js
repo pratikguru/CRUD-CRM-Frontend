@@ -8,7 +8,11 @@ export const navigationReducer = (state = initialState, action) => {
         ...state,
         current_tab: action.payload,
       };
-
+    case NAV.SET_CURRENT_CLIENT_TAB:
+      return {
+        ...state,
+        current_client_tab: action.payload,
+      };
     default:
       return state;
   }

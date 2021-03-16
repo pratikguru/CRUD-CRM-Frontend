@@ -16,4 +16,5 @@ export const AUTH = {
 
 export const NAV = {
   SET_CURRENT_TAB: "SET_CURRENT_TAB",
+  SET_CURRENT_CLIENT_TAB: "SET_CURRENT_CLIENT_TAB",
 };

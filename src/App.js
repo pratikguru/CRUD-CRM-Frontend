@@ -1,15 +1,14 @@
 import "./App.css";
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import LoginBox from "./components/LoginBox";
 import styled from "styled-components";
-import { login } from "./redux/actions/authActions";
 import MainComponent from "./components/MainComponent/index";
 import { useSelector, useDispatch } from "react-redux";
+import { login } from "./redux/actions/authActions";
 
 const Container = styled.div`
   display: flex;
-  height: 100vh;
+  height: ${(props) => (props.authenticated ? "auto" : "100vh")};
   width: 100vw;
   justify-content: center;
   align-items: center;
@@ -19,10 +18,19 @@ const Container = styled.div`
 
 function App() {
   const authenticated = useSelector((state) => state.auth.authenticated);
-  console.log(authenticated);
+  const dispatch = useDispatch();
+
+  if (localStorage.getItem("token")) {
+    dispatch(login({ authStatus: 1, token: localStorage.getItem("token") }));
+  }
+
   return (
     <Container>
-      {!authenticated ? <LoginBox></LoginBox> : <MainComponent></MainComponent>}
+      {!authenticated ? (
+        <LoginBox></LoginBox>
+      ) : (
+        <MainComponent height={authenticated}></MainComponent>
+      )}
     </Container>
   );
 }

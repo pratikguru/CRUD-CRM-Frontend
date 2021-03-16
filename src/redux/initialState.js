@@ -10,7 +10,13 @@ export const initialState = {
     token: "",
   },
   navigation: {
-    current_tab: "dashboard",
+    current_tab: { current_tab: "dashboard" },
+    current_client_tab: { current_tab: "clients" },
+  },
+  client: {
+    client_name: "",
+    loading: false,
+    clients: [],
   },
 };
 
