@@ -18,6 +18,10 @@ export const initialState = {
     loading: false,
     clients: [],
   },
+  product: {
+    products: [],
+    loading: false,
+  },
 };
 
 export const BACKEND_URL = "http://localhost:9000";

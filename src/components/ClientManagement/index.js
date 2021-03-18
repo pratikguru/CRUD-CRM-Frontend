@@ -7,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import InputBoxAdv from "../InputBoxAdv";
 import CustomButton from "../Button";
 import Modal from "./Modal";
-
+import CustomSelect from "../SelectInput";
 import NavigationBar from "./NavigationBar";
 import { getClients, addNewClient } from "../../redux/api/clientManagement";
 
@@ -333,18 +333,109 @@ function ClientManagement() {
             >
               <InputSection>
                 <Header style={{ fontSize: "18px" }}>Sub Clients Group </Header>
-                <InputBoxAdv
-                  type="input"
-                  placeholder={"Sub Client Name "}
+                <div
                   style={{
-                    sectionOne: { marginLeft: "5px" },
-                    sectionTwo: {
-                      width: "180px",
-                      height: "20px",
-                      margin: "5px",
-                    },
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "wrap",
+                    gap: "10px",
                   }}
-                ></InputBoxAdv>
+                >
+                  <CustomSelect
+                    label={"Client Name"}
+                    reference_key={"client_name"}
+                    data={currentClientList}
+                    handleChange={(e) => console.log(e)}
+                  ></CustomSelect>
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Client ID"}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "180px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Sub Client Name "}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "180px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Sub Client Address "}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "250px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Correspondent First Name"}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "250px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Correspondent Last Name "}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "250px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Correspondent Email"}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "250px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Correspondent Phone"}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "180px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                  ></InputBoxAdv>
+                </div>
                 <CustomButton
                   text={"Add Sub Client"}
                   disabled={true}

@@ -36,6 +36,7 @@ const InputContainer = styled(motion.div)`
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: fit-content;
 `;
 
 const NamePlate = styled(motion.div)`
