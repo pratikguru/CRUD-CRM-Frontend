@@ -22,6 +22,14 @@ export const initialState = {
     products: [],
     loading: false,
   },
+  notifications: {
+    notificationsList: [
+      {
+        message: "Welcome!",
+        type: "info",
+      },
+    ],
+  },
 };
 
 export const BACKEND_URL = "http://localhost:9000";

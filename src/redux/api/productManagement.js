@@ -1,4 +1,5 @@
 import { startProductRequest, productSuccess } from "../actions/productActions";
+import { addNotification } from "../actions/notificationActions";
 
 export function getProducts() {
   return (dispatch) => {
@@ -29,6 +30,12 @@ export function addProduct(product) {
       .then((res) => res.json())
       .then((data) => {
         dispatch(getProducts());
+        dispatch(
+          addNotification({
+            type: "success",
+            message: "Product has been successfully added!",
+          })
+        );
       });
   };
 }

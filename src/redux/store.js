@@ -4,6 +4,7 @@ import { authenticationReducer } from "./reducers/authentication_reducer";
 import { navigationReducer } from "./reducers/navigation_reducer";
 import { clientReducer } from "./reducers/client_reducer";
 import { productReducer } from "./reducers/product_reducer";
+import { notificationReducer } from "./reducers/notification_reducer";
 import { initialState } from "./initialState";
 
 console.log(authenticationReducer);
@@ -12,6 +13,7 @@ export const rootReducer = combineReducers({
   navigation: navigationReducer,
   client: clientReducer,
   product: productReducer,
+  notifications: notificationReducer,
 });
 
 export const store = createStore(

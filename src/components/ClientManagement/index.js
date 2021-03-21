@@ -10,6 +10,7 @@ import Modal from "./Modal";
 import CustomSelect from "../SelectInput";
 import NavigationBar from "./NavigationBar";
 import { getClients, addNewClient } from "../../redux/api/clientManagement";
+import { getProducts } from "../../redux/api/productManagement";
 
 import EditIcon from "../../assets/icons/edit.svg";
 import ShowIcon from "../../assets/icons/show.svg";
@@ -188,8 +189,8 @@ function ClientManagement() {
   );
   const currentClientList = useSelector((state) => state.client.clients);
   const clientAddSuccess = useSelector((state) => state.client.loading);
+  const productList = useSelector((state) => state.product.products);
 
-  console.log(currentClientList);
   /* use states */
   const [clientInformation, setClientInformation] = useState("");
   const handleInputChange = (e, type) => {
@@ -201,6 +202,7 @@ function ClientManagement() {
   useEffect(() => {
     setClientInformation("");
     dispatch(getClients());
+    dispatch(getProducts());
   }, [setClientInformation, dispatch]);
 
   const handleAddClient = async () => {
@@ -268,7 +270,7 @@ function ClientManagement() {
                 ></CustomButton>
                 {clientAddSuccess && (
                   <AddClientLoadingIndicator
-                    animate={{ opacity: [0, 1, 0] }}
+                    animate={{ scale: [0.97, 1, 0.97] }}
                     transition={{
                       duration: 0.5,
                       repeat: Infinity,
@@ -435,7 +437,14 @@ function ClientManagement() {
                       },
                     }}
                   ></InputBoxAdv>
+                  <CustomSelect
+                    label={"Assosiated Products"}
+                    reference_key={"product_name"}
+                    data={productList}
+                    handleChange={(e) => console.log(e)}
+                  ></CustomSelect>
                 </div>
+
                 <CustomButton
                   text={"Add Sub Client"}
                   disabled={true}

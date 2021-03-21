@@ -6,6 +6,8 @@ import MainComponent from "./components/MainComponent/index";
 import { useSelector, useDispatch } from "react-redux";
 import { login } from "./redux/actions/authActions";
 
+import Notification from "./components/Notification";
+
 const Container = styled.div`
   display: flex;
   height: ${(props) => (props.authenticated ? "auto" : "100vh")};
@@ -29,7 +31,10 @@ function App() {
       {!authenticated ? (
         <LoginBox></LoginBox>
       ) : (
-        <MainComponent height={authenticated}></MainComponent>
+        <>
+          <MainComponent height={authenticated}></MainComponent>
+          <Notification></Notification>
+        </>
       )}
     </Container>
   );
