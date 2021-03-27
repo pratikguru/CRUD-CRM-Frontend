@@ -13,3 +13,5 @@
 * Functional Components
 * Create React App Architecture
 
+![Shot of what this looks like?](snap_1.PNG)
+![Shot of what this looks like?](snap_2.PNG)
