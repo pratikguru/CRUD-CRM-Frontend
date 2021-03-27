@@ -1,4 +1,6 @@
-# This is a project aimed at making a custom CRM application for handling service requests, sales leads management, client management and inventory managment.
+# Less CRM Project
+
+## This is a project aimed at making a custom CRM application for handling service requests, sales leads management, client management and inventory managment.
 
 
 ## Built with 
@@ -10,3 +12,4 @@
 * Hooks
 * Functional Components
 * Create React App Architecture
+
