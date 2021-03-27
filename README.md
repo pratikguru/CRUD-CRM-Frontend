@@ -11,6 +11,7 @@
 * React-Redux-Thunk
 * Hooks
 * Functional Components
+* React Framer Motion API
 * Create React App Architecture
 
 ![Shot of what this looks like?](snap-1.png)
