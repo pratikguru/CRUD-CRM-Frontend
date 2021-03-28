@@ -1,4 +1,9 @@
-import { startClientsRequest, clientsSuccess } from "../actions/clientActions";
+import {
+  startClientsRequest,
+  clientsSuccess,
+  subClientsAddRequest,
+  subClientsAddSuccess,
+} from "../actions/clientActions";
 
 export function getClients() {
   return (dispatch) => {
@@ -18,7 +23,7 @@ export function getClients() {
 
 export const addNewClient = (client_name) => {
   return async (dispatch) => {
-    await fetch("http://127.0.0.1:9000/api/clients/add_client", {
+    await fetch("http://192.168.0.122:9000/api/clients/add_client", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -31,5 +36,36 @@ export const addNewClient = (client_name) => {
     })
       .then((res) => res.json())
       .then((data) => dispatch(getClients()));
+  };
+};
+
+export const getSubClients = (sub_client_id) => {
+  return (dispatch) => {
+    dispatch(subClientsAddRequest());
+    fetch("http://192.168.0.122:9000/api/clients/get_sub_clients", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify(sub_client_id),
+    })
+      .then((res) => res.json())
+      .then((data) => dispatch(subClientsAddSuccess(data.result)));
+  };
+};
+
+export const addNewSubClient = (client_information) => {
+  return async (dispatch) => {
+    await fetch("http://192.168.0.122:9000/api/clients/add_sub_client", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "auth-token": localStorage.getItem("token"),
+      },
+      body: JSON.stringify(client_information),
+    })
+      .then((res) => res.json())
+      .then((data) => dispatch(getSubClients(client_information.client_id)));
   };
 };

@@ -9,7 +9,11 @@ import CustomButton from "../Button";
 import Modal from "./Modal";
 import CustomSelect from "../SelectInput";
 import NavigationBar from "./NavigationBar";
-import { getClients, addNewClient } from "../../redux/api/clientManagement";
+import {
+  getClients,
+  addNewClient,
+  getSubClients,
+} from "../../redux/api/clientManagement";
 import { getProducts } from "../../redux/api/productManagement";
 
 import EditIcon from "../../assets/icons/edit.svg";
@@ -180,6 +184,17 @@ const EditButton = styled(motion.div)`
   align-items: center;
 `;
 
+const subClientInitData = {
+  client_id: "",
+  sub_client_name: "",
+  sub_client_address: "",
+  sub_client_correspondent_first_name: "",
+  sub_client_correspondent_last_name: "",
+  sub_client_correspondent_email: "",
+  sub_client_correspondent_phone: "",
+  products: [],
+};
+
 function ClientManagement() {
   const dispatch = useDispatch();
 
@@ -193,21 +208,76 @@ function ClientManagement() {
 
   /* use states */
   const [clientInformation, setClientInformation] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [
+    subClientInformation = subClientInitData,
+    setSubClientInformation,
+  ] = useState();
+  const [subClientInformationUnlock, setSubClientInformationUnlock] = useState(
+    false
+  );
+
   const handleInputChange = (e, type) => {
     setClientInformation(e.target.value);
   };
-  const [showModal, setShowModal] = useState(false);
+
+  const handleSubClientChange = (type, e) => {
+    var sub_client_information = subClientInformation;
+
+    if (type === "client_name") {
+      sub_client_information["client_id"] = currentClientList[e].client_id;
+
+      setSubClientInformation(
+        JSON.parse(JSON.stringify(sub_client_information))
+      );
+    } else if (type === "product_name") {
+      sub_client_information["products"].push({
+        product_name: productList[e].product_name,
+        product_id: productList[e]._id,
+      });
+      setSubClientInformation(
+        JSON.parse(JSON.stringify(sub_client_information))
+      );
+    } else {
+      sub_client_information[type] = e.target.value;
+      setSubClientInformation(
+        JSON.parse(JSON.stringify(sub_client_information))
+      );
+    }
+
+    let unlock = true;
+    for (let key in subClientInformation) {
+      if (subClientInformation[key] === "") {
+        unlock = false;
+      }
+    }
+    if (unlock) {
+      setSubClientInformationUnlock(true);
+    } else {
+      setSubClientInformationUnlock(false);
+    }
+  };
 
   /* useEffect for client name. */
   useEffect(() => {
     setClientInformation("");
+    setSubClientInformation(subClientInitData);
     dispatch(getClients());
     dispatch(getProducts());
-  }, [setClientInformation, dispatch]);
+    dispatch(getSubClients({ client_id: "1fi64qf1iklnt8t3i" }));
+  }, [setClientInformation, setSubClientInformation, dispatch]);
 
   const handleAddClient = async () => {
     await dispatch(addNewClient(clientInformation));
   };
+
+  const handleAddSubClient = async () => {
+    console.log(subClientInformation);
+  };
+
+  React.useEffect(() => {
+    console.log(subClientInformation);
+  }, [subClientInformation]);
 
   return (
     <Container
@@ -347,7 +417,9 @@ function ClientManagement() {
                     label={"Client Name"}
                     reference_key={"client_name"}
                     data={currentClientList}
-                    handleChange={(e) => console.log(e)}
+                    handleChange={(e) =>
+                      handleSubClientChange("client_name", e)
+                    }
                   ></CustomSelect>
                   <InputBoxAdv
                     type="input"
@@ -360,6 +432,11 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    value={
+                      subClientInformation.client_id &&
+                      subClientInformation.client_id
+                    }
+                    onChange={(e) => handleSubClientChange("client_id", e)}
                   ></InputBoxAdv>
 
                   <InputBoxAdv
@@ -373,6 +450,13 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange("sub_client_name", e)
+                    }
+                    value={
+                      subClientInformation.sub_client_name &&
+                      subClientInformation.sub_client_name
+                    }
                   ></InputBoxAdv>
 
                   <InputBoxAdv
@@ -386,6 +470,10 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange("sub_client_address", e)
+                    }
+                    value={subClientInformation?.sub_client_address}
                   ></InputBoxAdv>
 
                   <InputBoxAdv
@@ -399,6 +487,15 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange(
+                        "sub_client_correspondent_first_name",
+                        e
+                      )
+                    }
+                    value={
+                      subClientInformation?.sub_client_correspondent_first_name
+                    }
                   ></InputBoxAdv>
                   <InputBoxAdv
                     type="input"
@@ -411,6 +508,15 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange(
+                        "sub_client_correspondent_last_name",
+                        e
+                      )
+                    }
+                    value={
+                      subClientInformation?.sub_client_correspondent_last_name
+                    }
                   ></InputBoxAdv>
                   <InputBoxAdv
                     type="input"
@@ -423,6 +529,10 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange("sub_client_correspondent_email", e)
+                    }
+                    value={subClientInformation?.sub_client_correspondent_email}
                   ></InputBoxAdv>
 
                   <InputBoxAdv
@@ -436,21 +546,45 @@ function ClientManagement() {
                         margin: "5px",
                       },
                     }}
+                    onChange={(e) =>
+                      handleSubClientChange("sub_client_correspondent_phone", e)
+                    }
+                    value={subClientInformation?.sub_client_correspondent_phone}
                   ></InputBoxAdv>
                   <CustomSelect
                     label={"Assosiated Products"}
                     reference_key={"product_name"}
                     data={productList}
-                    handleChange={(e) => console.log(e)}
+                    handleChange={(e) =>
+                      handleSubClientChange("product_name", e)
+                    }
                   ></CustomSelect>
+
+                  <InputBoxAdv
+                    type="input"
+                    placeholder={"Associated Product ID"}
+                    style={{
+                      sectionOne: { marginLeft: "5px" },
+                      sectionTwo: {
+                        width: "180px",
+                        height: "20px",
+                        margin: "5px",
+                      },
+                    }}
+                    onChange={(e) => handleSubClientChange("product_id", e)}
+                    value={
+                      subClientInformation.products[0]?.product_id &&
+                      subClientInformation.products[0]?.product_id
+                    }
+                  ></InputBoxAdv>
                 </div>
 
                 <CustomButton
                   text={"Add Sub Client"}
-                  disabled={true}
+                  disabled={!subClientInformationUnlock}
                   style={{ width: "120px", height: "40px", margin: "5px" }}
                   onClick={() => {
-                    handleAddClient();
+                    handleAddSubClient();
                   }}
                 ></CustomButton>
               </InputSection>

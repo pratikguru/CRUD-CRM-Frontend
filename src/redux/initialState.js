@@ -17,6 +17,7 @@ export const initialState = {
     client_name: "",
     loading: false,
     clients: [],
+    sub_clients: [],
   },
   product: {
     products: [],
