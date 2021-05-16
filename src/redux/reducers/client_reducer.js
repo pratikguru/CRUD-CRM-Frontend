@@ -17,12 +17,12 @@ export const clientReducer = (state = initialState, action) => {
     case CLIENT.SET_SUB_CLIENTS_NEW_REQUEST:
       return {
         ...state,
-        loading: true,
+        loadingSubClients: true,
       };
     case CLIENT.SET_SUB_CLIENTS_NEW_SUCCESS:
       return {
         ...state,
-        loading: false,
+        loadingSubClients: false,
         sub_clients: action.payload,
       };
     default:

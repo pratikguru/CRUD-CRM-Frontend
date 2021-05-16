@@ -13,6 +13,7 @@ import {
   getClients,
   addNewClient,
   getSubClients,
+  addNewSubClient,
 } from "../../redux/api/clientManagement";
 import { getProducts } from "../../redux/api/productManagement";
 
@@ -184,6 +185,17 @@ const EditButton = styled(motion.div)`
   align-items: center;
 `;
 
+const ErrorMessage = styled(motion.div)`
+  width: -webkit-fill-available;
+  height: auto;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 300;
+`;
+
 const subClientInitData = {
   client_id: "",
   sub_client_name: "",
@@ -204,7 +216,14 @@ function ClientManagement() {
   );
   const currentClientList = useSelector((state) => state.client.clients);
   const clientAddSuccess = useSelector((state) => state.client.loading);
+  const subClientAddSucces = useSelector(
+    (state) => state.client.loadingSubClients
+  );
+  const currentSubClientList = useSelector((state) => state.client.sub_clients);
   const productList = useSelector((state) => state.product.products);
+
+  console.log(productList);
+  console.log(currentSubClientList);
 
   /* use states */
   const [clientInformation, setClientInformation] = useState("");
@@ -264,7 +283,7 @@ function ClientManagement() {
     setSubClientInformation(subClientInitData);
     dispatch(getClients());
     dispatch(getProducts());
-    dispatch(getSubClients({ client_id: "1fi64qf1iklnt8t3i" }));
+    //
   }, [setClientInformation, setSubClientInformation, dispatch]);
 
   const handleAddClient = async () => {
@@ -273,11 +292,16 @@ function ClientManagement() {
 
   const handleAddSubClient = async () => {
     console.log(subClientInformation);
+    dispatch(addNewSubClient(subClientInformation));
   };
 
   React.useEffect(() => {
-    console.log(subClientInformation);
-  }, [subClientInformation]);
+    //console.log(subClientInformation);
+    if (subClientInformation["client_id"]) {
+      console.log(subClientInformation);
+      dispatch(getSubClients({ client_id: subClientInformation["client_id"] }));
+    }
+  }, [subClientInformation, subClientInformation["client_id"], dispatch]);
 
   return (
     <Container
@@ -573,8 +597,12 @@ function ClientManagement() {
                     }}
                     onChange={(e) => handleSubClientChange("product_id", e)}
                     value={
-                      subClientInformation.products[0]?.product_id &&
-                      subClientInformation.products[0]?.product_id
+                      subClientInformation.products[
+                        subClientInformation.products.length - 1
+                      ]?.product_id &&
+                      subClientInformation.products[
+                        subClientInformation.products.length - 1
+                      ]?.product_id
                     }
                   ></InputBoxAdv>
                 </div>
@@ -587,7 +615,60 @@ function ClientManagement() {
                     handleAddSubClient();
                   }}
                 ></CustomButton>
+                {subClientAddSucces && (
+                  <AddClientLoadingIndicator
+                    animate={{ scale: [0.97, 1, 0.97] }}
+                    transition={{
+                      duration: 0.5,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                  >
+                    {"Fetching Sub Client Data!"}
+                  </AddClientLoadingIndicator>
+                )}
               </InputSection>
+              {currentSubClientList.length > 0 && (
+                <InputSection
+                  style={{ marginTop: "25px", marginBottom: "50px" }}
+                >
+                  <Header style={{ fontSize: "18px" }}>
+                    {" "}
+                    Sub Client Listings{" "}
+                  </Header>
+                  {currentSubClientList.length > 0 &&
+                    currentSubClientList.map((value, index) => (
+                      <CustomRow
+                        key={index}
+                        whileHover={{ boxShadow: "0px 0px 3px 2px #d5d5dc" }}
+                      >
+                        <div style={{ display: "flex" }}>
+                          <IconBox>
+                            {value.sub_client_name.toUpperCase()[0]}
+                          </IconBox>
+
+                          <MetaDataContainer>
+                            {" "}
+                            {value.sub_client_name.toUpperCase()}
+                            <MetaDataClientId>
+                              {value.sub_client_id.toUpperCase()}
+                            </MetaDataClientId>
+                          </MetaDataContainer>
+                        </div>
+                        <EditButton
+                          onClick={() => setShowModal(true)}
+                          whileTap={{ scale: 0.88 }}
+                        >
+                          <img
+                            src={ShowIcon}
+                            alt="i"
+                            style={{ width: "20px", height: "20px" }}
+                          />
+                        </EditButton>
+                      </CustomRow>
+                    ))}
+                </InputSection>
+              )}
             </InputContainer>
           )}
         </ScrollContainer>

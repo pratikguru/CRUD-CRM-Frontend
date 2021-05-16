@@ -1,7 +1,6 @@
 import { AUTH } from "../actionTypes/authenticationActionTypes";
 import { BACKEND_URL } from "../initialState";
-
-import axios from "axios";
+import { BACKEND_SETTINGS } from "../../appSettings";
 
 export const login = (token) => ({
   type: AUTH.AUTHENTICATED,
@@ -37,6 +36,37 @@ export const setUserPassword = (user_password) => ({
   type: AUTH.SET_USER_PASSWORD,
   payload: user_password,
 });
+
+export const getAllUsers = () => ({
+  type: AUTH.GET_ALL_USERS_REQUEST,
+});
+
+export const setAllUsers = (payload) => ({
+  type: AUTH.GET_ALL_USERS_SUCCESS,
+  payload: payload,
+});
+
+export const getUsers = () => {
+  return (dispatch) => {
+    dispatch(getAllUsers());
+    fetch(
+      `http://${BACKEND_SETTINGS.IP}:${BACKEND_SETTINGS.PORT}/api/all_users`,
+      {
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+        },
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        let buffer = [];
+        for (let key in data) {
+          buffer.push(data[key]);
+        }
+        dispatch(setAllUsers(buffer));
+      });
+  };
+};
 
 export const loginUser = (login_credentials) => {
   return (dispatch) => {

@@ -8,6 +8,8 @@ export const initialState = {
     user_type: 1,
     user_password: "",
     token: "",
+    loading: false,
+    users: [],
   },
   navigation: {
     current_tab: { current_tab: "dashboard" },
@@ -16,12 +18,17 @@ export const initialState = {
   client: {
     client_name: "",
     loading: false,
+    loadingSubClients: false,
     clients: [],
     sub_clients: [],
   },
   product: {
     products: [],
     loading: false,
+  },
+  service: {
+    services: [],
+    loadingServices: false,
   },
   notifications: {
     notificationsList: [

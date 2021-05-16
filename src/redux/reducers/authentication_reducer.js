@@ -45,6 +45,18 @@ export const authenticationReducer = (state = initialState, action) => {
         ...state,
         user_password: action.payload,
       };
+
+    case AUTH.GET_ALL_USERS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case AUTH.GET_ALL_USERS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        users: action.payload,
+      };
     default:
       return state;
   }
