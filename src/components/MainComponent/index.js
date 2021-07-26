@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Navigationbar from "../Navigation";
 import Dashboard from "../Dashboard";
-import SalesManagement from "../SalesManagement";
-import ServiceMangement from "../ServiceManagement";
 import ClientManagement from "../ClientManagement";
+import EventManagement from "../EventManagement";
 import ProductManagement from "../ProductManagement";
 
 const Container = styled(motion.div)`
@@ -31,15 +30,10 @@ function MainComponent() {
       {currentTab.current_tab === "clients" && (
         <ClientManagement></ClientManagement>
       )}
-      {currentTab.current_tab === "service" && (
-        <ServiceMangement></ServiceMangement>
+      {currentTab.current_tab === "events" && (
+        <EventManagement></EventManagement>
       )}
-      {currentTab.current_tab === "sales" && (
-        <SalesManagement></SalesManagement>
-      )}
-      {currentTab.current_tab === "products" && (
-        <ProductManagement></ProductManagement>
-      )}
+      {currentTab.current_tab === "services" && <ProductManagement />}
     </Container>
   );
 }

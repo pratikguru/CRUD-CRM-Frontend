@@ -4,11 +4,16 @@ import { motion } from "framer-motion";
 import media from "styled-media-query";
 
 import { useSelector, useDispatch } from "react-redux";
-import InputBoxAdv from "../InputBoxAdv";
-import CustomButton from "../Button";
+import InputBoxAdv from "../FormComponents/InputBoxAdv";
+import CustomButton from "../FormComponents/Button";
 import Modal from "./Modal";
-import CustomSelect from "../SelectInput";
+import CustomSelect from "../FormComponents/SelectInput";
+import CustomSelectMUI from "../FormComponents/SelectInputMUI";
+import MulitSelectBoxMUI from "../FormComponents/MultiSelectInputMUI";
+import InputBoxMUI from "../FormComponents/InputBoxMUI";
 import NavigationBar from "./NavigationBar";
+import BdayTemplate from "../Templates/bdayTemplate";
+
 import {
   getClients,
   addNewClient,
@@ -17,9 +22,7 @@ import {
 } from "../../redux/api/clientManagement";
 import { getProducts } from "../../redux/api/productManagement";
 
-import EditIcon from "../../assets/icons/edit.svg";
 import ShowIcon from "../../assets/icons/show.svg";
-
 const Container = styled(motion.div)`
   width: -webkit-fill-available;
   height: auto;
@@ -78,7 +81,7 @@ const InputContainer = styled(motion.div)`
 
 const InputSection = styled.div`
   display: flex;
-  width: 90%;
+  width: 80%;
   height: auto;
   padding: 10px;
   border-radius: 16px;
@@ -196,6 +199,15 @@ const ErrorMessage = styled(motion.div)`
   font-weight: 300;
 `;
 
+const ButtonLayer = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  padding: 5px;
+  justify-content: center;
+  align-items: center;
+`;
+
 const subClientInitData = {
   client_id: "",
   sub_client_name: "",
@@ -222,9 +234,6 @@ function ClientManagement() {
   const currentSubClientList = useSelector((state) => state.client.sub_clients);
   const productList = useSelector((state) => state.product.products);
 
-  console.log(productList);
-  console.log(currentSubClientList);
-
   /* use states */
   const [clientInformation, setClientInformation] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -235,6 +244,11 @@ function ClientManagement() {
   const [subClientInformationUnlock, setSubClientInformationUnlock] = useState(
     false
   );
+  const [selectedProductNames, setSelectedProductNames] = useState([]);
+  const [clearButton, setClearButton] = useState(false);
+
+  console.log(selectedProductNames);
+  console.log(subClientInformation);
 
   const handleInputChange = (e, type) => {
     setClientInformation(e.target.value);
@@ -242,18 +256,24 @@ function ClientManagement() {
 
   const handleSubClientChange = (type, e) => {
     var sub_client_information = subClientInformation;
-
+    console.log(type, e);
     if (type === "client_name") {
-      sub_client_information["client_id"] = currentClientList[e].client_id;
+      sub_client_information["client_id"] =
+        currentClientList[e.target.value].client_id;
 
       setSubClientInformation(
         JSON.parse(JSON.stringify(sub_client_information))
       );
     } else if (type === "product_name") {
       sub_client_information["products"].push({
-        product_name: productList[e].product_name,
-        product_id: productList[e]._id,
+        product_name: productList[e.target.value].product_name,
+        product_id: productList[e.target.value]._id,
       });
+
+      let selectedProducts = selectedProductNames;
+      selectedProducts.push(productList[e.target.value].product_name);
+      setSelectedProductNames(selectedProducts);
+
       setSubClientInformation(
         JSON.parse(JSON.stringify(sub_client_information))
       );
@@ -275,6 +295,26 @@ function ClientManagement() {
     } else {
       setSubClientInformationUnlock(false);
     }
+  };
+
+  const handleChangeProductSelection = (type, e) => {
+    let selectedProducts = selectedProductNames;
+    selectedProducts.push(e.target.value);
+    setSelectedProductNames([...e.target.value]);
+
+    let sub_client_information = subClientInformation;
+    sub_client_information["products"].push({
+      product_name:
+        productList[e.target.value[e.target.value.length - 1]].product_name,
+      product_id: productList[e.target.value[e.target.value.length - 1]]._id,
+    });
+    setSubClientInformation(JSON.parse(JSON.stringify(sub_client_information)));
+  };
+
+  const handleRowSelection = (value, index) => {
+    console.log(value, index);
+    setSubClientInformation(JSON.parse(JSON.stringify(value)));
+    setClearButton(true);
   };
 
   /* useEffect for client name. */
@@ -301,8 +341,9 @@ function ClientManagement() {
       console.log(subClientInformation);
       dispatch(getSubClients({ client_id: subClientInformation["client_id"] }));
     }
-  }, [subClientInformation, subClientInformation["client_id"], dispatch]);
+  }, [subClientInformation, subClientInformation.client_id, dispatch]);
 
+  console.log("currentClientList", currentClientList);
   return (
     <Container
       positionTransition
@@ -432,45 +473,42 @@ function ClientManagement() {
                 <div
                   style={{
                     display: "flex",
-                    flexDirection: "row",
+                    flexDirection: "column",
                     flexWrap: "wrap",
-                    gap: "10px",
+                    justifyContent: "center",
+                    alignItems: "center",
                   }}
                 >
-                  <CustomSelect
+                  <CustomSelectMUI
+                    multiple={false}
                     label={"Client Name"}
-                    reference_key={"client_name"}
+                    referenceKey={"client_name"}
                     data={currentClientList}
                     handleChange={(e) =>
                       handleSubClientChange("client_name", e)
                     }
-                  ></CustomSelect>
-                  <InputBoxAdv
-                    type="input"
-                    placeholder={"Client ID"}
+                  ></CustomSelectMUI>
+                  <InputBoxMUI
+                    placeHolder={"Client ID"}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "180px",
-                        height: "20px",
-                        margin: "5px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                       },
                     }}
+                    onChange={(e) => handleSubClientChange("client_id", e)}
                     value={
                       subClientInformation.client_id &&
                       subClientInformation.client_id
                     }
-                    onChange={(e) => handleSubClientChange("client_id", e)}
-                  ></InputBoxAdv>
+                  />
 
-                  <InputBoxAdv
-                    type="input"
-                    placeholder={"Sub Client Name "}
+                  <InputBoxMUI
+                    placeHolder={"Sub Client Name "}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "180px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -481,16 +519,15 @@ function ClientManagement() {
                       subClientInformation.sub_client_name &&
                       subClientInformation.sub_client_name
                     }
-                  ></InputBoxAdv>
+                  ></InputBoxMUI>
 
-                  <InputBoxAdv
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Sub Client Address "}
+                    placeHolder={"Sub Client Address "}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "250px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -498,16 +535,15 @@ function ClientManagement() {
                       handleSubClientChange("sub_client_address", e)
                     }
                     value={subClientInformation?.sub_client_address}
-                  ></InputBoxAdv>
+                  ></InputBoxMUI>
 
-                  <InputBoxAdv
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Correspondent First Name"}
+                    placeHolder={"Correspondent First Name"}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "250px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -520,15 +556,14 @@ function ClientManagement() {
                     value={
                       subClientInformation?.sub_client_correspondent_first_name
                     }
-                  ></InputBoxAdv>
-                  <InputBoxAdv
+                  ></InputBoxMUI>
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Correspondent Last Name "}
+                    placeHolder={"Correspondent Last Name "}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "250px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -541,15 +576,14 @@ function ClientManagement() {
                     value={
                       subClientInformation?.sub_client_correspondent_last_name
                     }
-                  ></InputBoxAdv>
-                  <InputBoxAdv
+                  ></InputBoxMUI>
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Correspondent Email"}
+                    placeHolder={"Correspondent Email"}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "250px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -557,16 +591,15 @@ function ClientManagement() {
                       handleSubClientChange("sub_client_correspondent_email", e)
                     }
                     value={subClientInformation?.sub_client_correspondent_email}
-                  ></InputBoxAdv>
+                  ></InputBoxMUI>
 
-                  <InputBoxAdv
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Correspondent Phone"}
+                    placeHolder={"Correspondent Phone"}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "180px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -574,24 +607,24 @@ function ClientManagement() {
                       handleSubClientChange("sub_client_correspondent_phone", e)
                     }
                     value={subClientInformation?.sub_client_correspondent_phone}
-                  ></InputBoxAdv>
-                  <CustomSelect
+                  ></InputBoxMUI>
+                  <MulitSelectBoxMUI
                     label={"Assosiated Products"}
-                    reference_key={"product_name"}
+                    referenceKey={"product_name"}
                     data={productList}
+                    selectedValue={selectedProductNames}
                     handleChange={(e) =>
-                      handleSubClientChange("product_name", e)
+                      handleChangeProductSelection("product_name", e)
                     }
-                  ></CustomSelect>
+                  ></MulitSelectBoxMUI>
 
-                  <InputBoxAdv
+                  <InputBoxMUI
                     type="input"
-                    placeholder={"Associated Product ID"}
+                    placeHolder={"Associated Product ID"}
                     style={{
-                      sectionOne: { marginLeft: "5px" },
                       sectionTwo: {
-                        width: "180px",
-                        height: "20px",
+                        width: "-webkit-fill-available",
+                        height: "40px",
                         margin: "5px",
                       },
                     }}
@@ -604,17 +637,28 @@ function ClientManagement() {
                         subClientInformation.products.length - 1
                       ]?.product_id
                     }
-                  ></InputBoxAdv>
+                  ></InputBoxMUI>
                 </div>
+                <ButtonLayer>
+                  <CustomButton
+                    text={"Add Sub Client"}
+                    disabled={!subClientInformationUnlock}
+                    style={{ width: "120px", height: "40px", margin: "5px" }}
+                    onClick={() => {
+                      handleAddSubClient();
+                    }}
+                  ></CustomButton>
+                  <CustomButton
+                    text={"Clear"}
+                    disabled={!clearButton}
+                    style={{ width: "120px", height: "40px", margin: "5px" }}
+                    onClick={() => {
+                      setSubClientInformation(subClientInitData);
+                      setClearButton(false);
+                    }}
+                  ></CustomButton>
+                </ButtonLayer>
 
-                <CustomButton
-                  text={"Add Sub Client"}
-                  disabled={!subClientInformationUnlock}
-                  style={{ width: "120px", height: "40px", margin: "5px" }}
-                  onClick={() => {
-                    handleAddSubClient();
-                  }}
-                ></CustomButton>
                 {subClientAddSucces && (
                   <AddClientLoadingIndicator
                     animate={{ scale: [0.97, 1, 0.97] }}
@@ -641,6 +685,7 @@ function ClientManagement() {
                       <CustomRow
                         key={index}
                         whileHover={{ boxShadow: "0px 0px 3px 2px #d5d5dc" }}
+                        onClick={() => handleRowSelection(value, index)}
                       >
                         <div style={{ display: "flex" }}>
                           <IconBox>

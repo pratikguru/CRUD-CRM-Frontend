@@ -2,6 +2,8 @@ import { AUTH } from "../actionTypes/authenticationActionTypes";
 import { BACKEND_URL } from "../initialState";
 import { BACKEND_SETTINGS } from "../../appSettings";
 
+import { addNotification } from "../actions/notificationActions";
+
 export const login = (token) => ({
   type: AUTH.AUTHENTICATED,
   payload: token,
@@ -70,7 +72,6 @@ export const getUsers = () => {
 
 export const loginUser = (login_credentials) => {
   return (dispatch) => {
-    console.log(login_credentials);
     fetch(BACKEND_URL + "/api/user/login/", {
       method: "POST",
       headers: {
@@ -82,21 +83,36 @@ export const loginUser = (login_credentials) => {
         if (response.status === 200) {
           const data = response.json();
           data.then((value) => {
-            console.log(value);
             dispatch(login({ token: value.token, authStatus: 1 }));
             localStorage.setItem("token", value.token);
+            dispatch(
+              addNotification({
+                type: "success",
+                message: value.message,
+              })
+            );
           });
         } else {
           const data = response.json();
           data.then((value) => {
-            console.log(value);
             dispatch(login({ token: "", authStatus: 0 }));
             localStorage.setItem("token", "");
+            dispatch(
+              addNotification({
+                type: "error",
+                message: value.message,
+              })
+            );
           });
         }
       })
       .catch((error) => {
-        console.log(error);
+        dispatch(
+          addNotification({
+            type: "error",
+            message: error,
+          })
+        );
       });
   };
 };

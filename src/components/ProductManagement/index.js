@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 import { useSelector, useDispatch } from "react-redux";
 import media from "styled-media-query";
 
-import InputBoxAdv from "../InputBoxAdv";
-import CustomButton from "../Button";
+import InputBoxAdv from "../FormComponents/InputBoxAdv";
+import CustomButton from "../FormComponents/Button";
 import Modal from "./Modal";
 import Notification from "../Notification";
 

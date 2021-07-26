@@ -38,9 +38,9 @@ function App() {
       ) : (
         <>
           <MainComponent height={authenticated}></MainComponent>
-          <Notification></Notification>
         </>
       )}
+      <Notification></Notification>
     </Container>
   );
 }

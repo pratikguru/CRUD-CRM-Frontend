@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import InputBox from "../InputBox";
-import CustomButton from "../Button";
+import InputBox from "../FormComponents/InputBox";
+import CustomButton from "../FormComponents/Button";
 import media from "styled-media-query";
 import MailIcon from "../../assets/icons/mail.svg";
 import Kannu from "../../assets/icons/show.svg";

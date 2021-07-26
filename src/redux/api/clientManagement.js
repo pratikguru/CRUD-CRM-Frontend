@@ -82,12 +82,19 @@ export const addNewSubClient = (client_information) => {
       .then((res) => res.json())
       .then((data) => {
         dispatch(subClientsAddSuccess(data.result));
+        dispatch(getSubClients({ client_id: client_information["client_id"] }));
         dispatch(
           addNotification({
             type: "success",
             message: `Sub Client ${client_information.sub_client_name} has been added successfully!`,
           })
         );
+      })
+      .catch((error) => {
+        addNotification({
+          type: "error",
+          message: error,
+        });
       });
   };
 };

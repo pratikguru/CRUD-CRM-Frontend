@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import MailIcon from "../../assets/icons/mail.svg";
 
 const InputStyled = styled.input`
   border: none;

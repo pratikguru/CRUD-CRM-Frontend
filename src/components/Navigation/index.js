@@ -86,27 +86,6 @@ function NavigationBar() {
       <TopNavigation>
         <NavLinks
           animate={{
-            color: currentNav.current_tab === "service" ? "#5F2EEA" : "",
-            borderBottom:
-              currentNav.current_tab === "service"
-                ? "2px solid #5F2EEA"
-                : "2px solid #FFFFFF",
-          }}
-          whileHover={{
-            borderBottom: "2px solid #5F2EEA",
-          }}
-          onClick={() => handleNavigationChange("service")}
-          transition={{ duration: 0.2, ease: "linear" }}
-        >
-          <img
-            src={SettingsIcon}
-            alt=""
-            style={{ width: "20px", height: "20px", margin: "2px" }}
-          />
-          Services
-        </NavLinks>
-        <NavLinks
-          animate={{
             color: currentNav.current_tab === "dashboard" ? "#5F2EEA" : "",
             borderBottom:
               currentNav.current_tab === "dashboard"
@@ -123,24 +102,7 @@ function NavigationBar() {
           />
           Dashboard{" "}
         </NavLinks>
-        <NavLinks
-          animate={{
-            color: currentNav.current_tab === "sales" ? "#5F2EEA" : "",
-            borderBottom:
-              currentNav.current_tab === "sales"
-                ? "2px solid #5F2EEA"
-                : "2px solid #FFFFFF",
-          }}
-          transition={{ duration: 0.2, ease: "linear" }}
-          onClick={() => handleNavigationChange("sales")}
-        >
-          <img
-            src={Sales}
-            alt=""
-            style={{ width: "20px", height: "20px", margin: "2px" }}
-          />
-          Sales{" "}
-        </NavLinks>
+
         <NavLinks
           animate={{
             color: currentNav.current_tab === "clients" ? "#5F2EEA" : "",
@@ -161,21 +123,41 @@ function NavigationBar() {
         </NavLinks>
         <NavLinks
           animate={{
-            color: currentNav.current_tab === "products" ? "#5F2EEA" : "",
+            color: currentNav.current_tab === "events" ? "#5F2EEA" : "",
             borderBottom:
-              currentNav.current_tab === "products"
+              currentNav.current_tab === "events"
                 ? "2px solid #5F2EEA"
                 : "2px solid #FFFFFF",
           }}
           transition={{ duration: 0.2, ease: "linear" }}
-          onClick={() => handleNavigationChange("products")}
+          onClick={() => handleNavigationChange("events")}
+          transition={{ duration: 0.2, ease: "linear" }}
         >
           <img
-            src={Tag}
+            src={Profile}
             alt=""
             style={{ width: "20px", height: "20px", margin: "2px" }}
           />
-          Products{" "}
+          Events{" "}
+        </NavLinks>
+        <NavLinks
+          animate={{
+            color: currentNav.current_tab === "services" ? "#5F2EEA" : "",
+            borderBottom:
+              currentNav.current_tab === "services"
+                ? "2px solid #5F2EEA"
+                : "2px solid #FFFFFF",
+          }}
+          transition={{ duration: 0.2, ease: "linear" }}
+          onClick={() => handleNavigationChange("services")}
+          transition={{ duration: 0.2, ease: "linear" }}
+        >
+          <img
+            src={Profile}
+            alt=""
+            style={{ width: "20px", height: "20px", margin: "2px" }}
+          />
+          Services{" "}
         </NavLinks>
         <NavLinks
           whileHover={{
